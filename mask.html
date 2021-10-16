@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
@@ -15,11 +15,20 @@
 </head>
 
 <body>
-    <div>Teachable Machine Image Model</div>
-    <button type="button" onclick="init()">Start</button>
 
+    <div style="background-color: #43c931; ">
+
+        <div>
+            <h1 id="title" style="text-align: center;">잠시만 기달려주세요 </h1>
+        </div>
+    </div>
     <div id="webcam-container"></div>
     <div id="label-container"></div>
+    <script>
+        window.onload = function() {
+            init()
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
     <script type="text/javascript">
@@ -68,13 +77,29 @@
 
         // run the webcam image through the image model
         async function predict() {
+
             // predict can take in an image, video or canvas html element
             const prediction = await model.predict(webcam.canvas);
+            if (prediction[0].probability.toFixed(2) == 1.00) {
+                document.getElementById('title').innerText = "마스크를 착용하고 있지않습니다. 마스크를 착용해주세요";
+
+            } else if (prediction[1].probability.toFixed(2) == 1.00) {
+                document.getElementById('title').innerText = "하얀색 마스크를 쓰고 있습니다";
+            } else if (prediction[2].probability.toFixed(2) == 1.00) {
+                document.getElementById('title').innerText = "검은색 마스클르 착용하고 있습니다";
+
+            } else if (prediction[3].probability.toFixed(2) == 1.00) {
+                document.getElementById('title').innerText = "손마스크를 하고 있습니다 마스크를 착용해주세요";
+            } else {
+                document.getElementById('title').innerText = "측정중입니다 웹캠 정면을 응시해주세요";
+            }
             for (let i = 0; i < maxPredictions; i++) {
                 const classPrediction =
                     prediction[i].className + ": " + prediction[i].probability.toFixed(2);
                 labelContainer.childNodes[i].innerHTML = classPrediction;
             }
+
+
         }
     </script>
 </body>
