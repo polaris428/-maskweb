@@ -80,15 +80,15 @@
 
             // predict can take in an image, video or canvas html element
             const prediction = await model.predict(webcam.canvas);
-            if (prediction[0].probability.toFixed(2) == 1.00) {
+            if (prediction[0].probability.toFixed(2) >= 0.7) {
                 document.getElementById('title').innerText = "마스크를 착용하고 있지않습니다. 마스크를 착용해주세요";
 
-            } else if (prediction[1].probability.toFixed(2) == 1.00) {
+            } else if (prediction[1].probability.toFixed(2) == 0.7) {
                 document.getElementById('title').innerText = "하얀색 마스크를 쓰고 있습니다";
-            } else if (prediction[2].probability.toFixed(2) == 1.00) {
-                document.getElementById('title').innerText = "검은색 마스클르 착용하고 있습니다";
+            } else if (prediction[2].probability.toFixed(2) == 0.7) {
+                document.getElementById('title').innerText = "검은색 마스크를 착용하고 있습니다";
 
-            } else if (prediction[3].probability.toFixed(2) == 1.00) {
+            } else if (prediction[3].probability.toFixed(2) >= 0.7) {
                 document.getElementById('title').innerText = "손마스크를 하고 있습니다 마스크를 착용해주세요";
             } else {
                 document.getElementById('title').innerText = "측정중입니다 웹캠 정면을 응시해주세요";
